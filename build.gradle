@@ -60,7 +60,7 @@ allprojects {
 
 }
 
-artifactoryPublish.skip = true
+artifactoryPublish.skip = false
 
 subprojects {
   apply plugin: 'maven'
