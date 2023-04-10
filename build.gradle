@@ -34,6 +34,11 @@ dependencies {
 
 
 allprojects {
+    apply plugin: 'com.jfrog.artifactory'
+    apply plugin: 'idea'
+    configure(subprojects.findAll { new File(it.projectDir, 'src').directory }) {
+        apply plugin: 'java'
+    }
     repositories {
         // 公司代理google库
         maven {
