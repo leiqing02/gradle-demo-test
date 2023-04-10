@@ -60,6 +60,43 @@ allprojects {
 
 }
 
+artifactoryPublish.skip = true
+
+subprojects {
+  apply plugin: 'maven'
+
+  if (project.plugins.hasPlugin('java')) {
+    //manifest.mainAttributes(provider: 'gradle')
+	manifest {
+		attributes 'provider': 'gradle'
+	}
+    configurations {
+      published
+    }
+    dependencies {
+      testImplementation 'junit:junit:4.7'
+    }
+    task sourceJar(type: Jar) {
+      from sourceSets.main.allSource
+      classifier = 'sources'
+    }
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+      classifier = 'javadoc'
+      from javadoc.destinationDir
+    }
+    artifactoryPublish {
+      dependsOn sourceJar, javadocJar
+    }
+    artifacts {
+      published sourceJar
+      published javadocJar
+    }
+  }
+}
+
+configurations {
+  published
+}
 
 tasks.named('test') {
     useJUnitPlatform()
